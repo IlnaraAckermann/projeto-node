@@ -20,7 +20,7 @@ model Post {
   authorId  Int
 }
 
-model ProfileProfile {
+model Profile {
   id     Int     @id @default(autoincrement())
   bio    String?
   user   User    @relation(fields: [userId], references: [id])
