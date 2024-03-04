@@ -1,9 +1,9 @@
 import { Router } from "express";
 
-const postRouter = Router();
+const profileRouter = Router();
 
-postRouter.get("/", (req, res) => {
-  res.send("Rota de post");
+profileRouter.get("/", (req, res) => {
+  res.send("Rota de profile");
 });
 
-export { postRouter };
+export { profileRouter };
