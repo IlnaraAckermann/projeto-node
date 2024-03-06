@@ -1,24 +1,13 @@
+import { postController } from "@modules/post/factory/PostFactory";
 import { Router } from "express";
 const postRouter = Router();
 
 postRouter
-  .get("/", (req, res) => {
-    res.send("Rota de post /");
-  })
-  .post("/", (req, res) => {
-    res.send("post de post /");
-  })
-  .get("/:id", (req, res) => {
-    res.send("get de post /:id");
-  })
-  .put("/:id", (req, res) => {
-    res.send("put de post /:id");
-  })
-  .patch("/:id", (req, res) => {
-    res.send("patch de post /:id");
-  })
-  .delete("/:id", (req, res) => {
-    res.send("delete de post /:id");
-  });
+  .get("/", postController.getAll.bind(postController))
+  .get("/author/:id", postController.getAllByUserID.bind(postController))
+  .post("/", postController.post.bind(postController))
+  .get("/:id", postController.getById.bind(postController))
+  .put("/:id", postController.update.bind(postController))
+  .delete("/:id", postController.delete.bind(postController));
 
 export { postRouter };
