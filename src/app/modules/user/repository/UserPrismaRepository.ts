@@ -41,15 +41,13 @@ export class UserPrismaRepository implements IUserRepository {
     userDto: UserPostRecord,
   ): Promise<UserUpdatedRecord> {
     const { email, name } = userDto;
-    await prisma.user.update({
+    return await prisma.user.update({
       where: { id: id },
       data: {
         email,
         name,
       },
     });
-    const userUpdated: UserUpdatedRecord = { email, name, id };
-    return userUpdated;
   }
   async delete(id: number): Promise<unknown> {
     return await prisma.user.delete({
