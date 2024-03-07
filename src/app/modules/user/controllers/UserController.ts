@@ -52,7 +52,7 @@ export class UserController {
         userId,
         userDto,
       );
-      res.send(userUpdated).status(200);
+      res.json(userUpdated).status(200);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error" });
