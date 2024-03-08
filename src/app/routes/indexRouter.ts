@@ -7,9 +7,6 @@ import swaggerDocument from "@swagger/swagger.json";
 
 const indexRoute = Router();
 
-indexRoute.get("/", (req, res) => {
-  res.send("Rota basica");
-});
 indexRoute.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 indexRoute.use("/posts", postRouter);
 indexRoute.use("/users", userRouter);

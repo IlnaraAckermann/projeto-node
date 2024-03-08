@@ -7,7 +7,7 @@ import { errorHandlerMiddleware } from "@middlewares/index";
 const app = express();
 
 app.use([cors(), express.json()]);
-app.use("/", indexRoute);
+app.use("/api", indexRoute);
 app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 3000;
