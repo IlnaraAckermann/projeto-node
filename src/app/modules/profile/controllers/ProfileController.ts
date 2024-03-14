@@ -1,36 +1,41 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { IProfileService } from "../services/IProfileService";
 import { ProfilePostRecord } from "../models/ProfilePostRecord";
 import { ProfileUpdateRecord } from "../models/ProfileUpdateRecord";
 import { ProfileGetRecord } from "../models/ProfileGetRecord";
+import AppError from "@errors/AppError";
 
 export class ProfileController {
   private profileService: IProfileService;
   constructor(profileService: IProfileService) {
     this.profileService = profileService;
   }
-  async getAll(req: Request, res: Response): Promise<void> {
+  async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const profiles = await this.profileService.getAll();
       res.json(profiles);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      next(error);
     }
   }
 
-  async post(req: Request, res: Response): Promise<void> {
+  async post(req: Request, res: Response, next: NextFunction): Promise<void> {
     const profileDto: ProfilePostRecord = req.body;
     try {
       await this.profileService.post(profileDto);
       res.status(201).json({ message: "Profile created" });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      next(error);
     }
   }
 
-  async getById(req: Request, res: Response): Promise<void> {
+  async getById(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     const id = Number(req.params.id);
     try {
       const profile = await this.profileService.getById(id);
@@ -41,10 +46,10 @@ export class ProfileController {
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      next(error);
     }
   }
-  async update(req: Request, res: Response): Promise<void> {
+  async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     const id = Number(req.params.id);
     const profileDto: ProfileUpdateRecord = req.body;
     try {
@@ -55,17 +60,18 @@ export class ProfileController {
       res.send(profileUpdated).status(200);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      next(error);
     }
   }
-  async delete(req: Request, res: Response): Promise<void> {
+  async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
     const id = Number(req.params.id);
     try {
       await this.profileService.delete(id);
       res.json({ message: "Profile deleted successfully" });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      const appError = new AppError(`User ${id} not found`, 404);
+      next(appError);
     }
   }
 }
