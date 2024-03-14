@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import AppError from "../errors/AppError";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 function errorHandlerMiddleware(
   error: Error,
@@ -9,6 +10,12 @@ function errorHandlerMiddleware(
 ) {
   if (error instanceof AppError) {
     return res.status(error.statusCode).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+  if (error instanceof PrismaClientKnownRequestError) {
+    return res.status(404).json({
       status: "error",
       message: error.message,
     });
